@@ -22,53 +22,81 @@
     </style>
     <script>
      
-        document.addEventListener('DOMContentLoaded', function() {
-            var calendarEl = document.getElementById('calendar');
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-              themeSystem: 'bootstrap5',
-              initialView: 'dayGridMonth', // Vue initiale du calendrier
-              events: [],
-              eventContent: function(arg) {
-                const title = arg.event.title || '';
-                const description = arg.event.extendedProps.description || '';
-                return {
-                  html: '<div class="event-title">' + title + '</div>' +
-                        '<div class="event-description">' + description + '</div>'
-                };
-              },
-              eventDidMount: function(arg) {
-                arg.el.style.backgroundColor = '#727CF5';
-                arg.el.style.display = 'flex';
-                arg.el.style.justifyContent = 'center';
-                arg.el.style.color = 'white';
-              }
-            });
+          // Define the list of authorized users
+    const authorizedUsers = [
+      { username: 'user1', calendarAccess: true },
+      { username: 'user2', calendarAccess: false },
+      // Add more users as needed
+    ];
 
-            let fetchedData;
+    // Check if a user is authorized to access the calendar
+    function isUserAuthorized(username) {
+      const user = authorizedUsers.find(user => user.username === username);
+      return user && user.calendarAccess;
+    }
 
-            const res = () => {
-              return fetch("http://localhost:3001/events")
-                .then(response => response.json())
-                .then(data => {
-                  fetchedData = data; // Store the fetched data in the variable
-                  return data;
-                })
-                .catch(error => {
-                  console.error('Erreur lors de la récupération des données :', error);
-                });
+    // Prompt for username and check authorization
+    function promptUsername() {
+      const username = prompt('Enter your username:');
+      if (isUserAuthorized(username)) {
+        renderCalendar();
+      } else {
+        alert('Access denied!');
+      }
+    }
+
+    function renderCalendar() {
+      document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          themeSystem: 'bootstrap5',
+          initialView: 'dayGridMonth', // Vue initiale du calendrier
+          events: [],
+          eventContent: function (arg) {
+            const title = arg.event.title || '';
+            const description = arg.event.extendedProps.description || '';
+            return {
+              html: '<div class="event-title">' + title + '</div>' +
+                '<div class="event-description">' + description + '</div>'
             };
-          
-            // Fetch the data and update the calendar events when the data is retrieved
-            res()
-              .then(data => {
-                calendar.setOption('events', data);
-                calendar.render();
-              })
-              .catch(error => {
-                console.error('Erreur lors de la récupération des données :', error);
-              });
+          },
+          eventDidMount: function (arg) {
+            arg.el.style.backgroundColor = '#727CF5';
+            arg.el.style.display = 'flex';
+            arg.el.style.justifyContent = 'center';
+            arg.el.style.color = 'white';
+          }
+        });
+
+        let fetchedData;
+
+        const res = () => {
+          return fetch("http://localhost:3001/events")
+            .then(response => response.json())
+            .then(data => {
+              fetchedData = data; // Store the fetched data in the variable
+              return data;
+            })
+            .catch(error => {
+              console.error('Erreur lors de la récupération des données :', error);
+            });
+        };
+
+        // Fetch the data and update the calendar events when the data is retrieved
+        res()
+          .then(data => {
+            calendar.setOption('events', data);
+            calendar.render();
+          })
+          .catch(error => {
+            console.error('Erreur lors de la récupération des données :', error);
           });
-          
+      });
+
+    }
+
+    // Call the promptUsername function to start the authentication process
+    promptUsername();
 
 
 
