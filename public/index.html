@@ -21,19 +21,30 @@
       }
     </style>
     <script>
-     
-          // Define the list of authorized users
+
     const authorizedUsers = [
-      { username: 'user1', calendarAccess: true },
+      { username: 'usedr2', calendarAccess: false },
+      { username: 'AZertyuioph972', calendarAccess: false },
+      { username: 'usedr2', calendarAccess: false },
+      { username: 'AZertyuioph972', calendarAccess: false },
+      { username: 'AZertyuioph972', calendarAccess: false },
+      { username: 'AZertyuioph972', calendarAccess: false },
+      { username: 'usedr2', calendarAccess: false },
+      { username: 'AZertyuiozzph972', calendarAccess: false },
+      { username: 'AZertyuioph972', calendarAccess: false },
+      { username: 'usedr2', calendarAccess: false },
+      { username: 'AZertyuiop972', calendarAccess: true },
       { username: 'user2', calendarAccess: false },
+      { username: 'AZertyuioph972', calendarAccess: false },
+      { username: 'usedr2', calendarAccess: false },
       // Add more users as needed
     ];
-
     // Check if a user is authorized to access the calendar
     function isUserAuthorized(username) {
       const user = authorizedUsers.find(user => user.username === username);
       return user && user.calendarAccess;
     }
+
 
     // Prompt for username and check authorization
     function promptUsername() {
@@ -97,8 +108,6 @@
 
     // Call the promptUsername function to start the authentication process
     promptUsername();
-
-
 
     </script>
   </head>
